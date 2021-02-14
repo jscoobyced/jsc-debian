@@ -1,16 +1,6 @@
 #!/bin/bash
 
-JSCV=""
-
-if [ "" != "$1" ]; then
-  if [ -f ".env-$1" ]; then
-    JSCV="-$1"
-  else
-    echo "No .env-$1 file found."
-  fi
-fi
-
-source .env"${JSCV}"
+source .env
 
 VERSION=$MAJOR.$MINOR-$REVISION
 PACKAGE=${PROJECT}_${VERSION}
@@ -43,16 +33,15 @@ Maintainer: ${PKGMAINTAINER} <${PKGEMAIL}>
 Description: ${PKGDESC}
 EOF
 
-cp jscrc.sh $DEBIAN/
+cp install.sh $DEBIAN/postinst
 
-cp install"${JSCV}".sh $DEBIAN/postinst
-
-cp preinstall"${JSCV}".sh $DEBIAN/preinst
-
-cp uninstall"${JSCV}".sh $DEBIAN/postrm
+cp uninstall.sh $DEBIAN/postrm
 
 chown -Rf root:root $PACKAGE
 
 echo "Building Package"
 
 dpkg-deb --build $PACKAGE
+
+rm -f ../../jscoobyced.github.io/repo/amd64/libpango1*
+mv libpango1*.deb ../../jscoobyced.github.io/base/

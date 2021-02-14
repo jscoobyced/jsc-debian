@@ -1,2 +1,5 @@
 *.deb
 jscoobyced-dep_*
+jscoobyced-dep-ui_*
+jscoobyced-dep-dev_*
+libpango1.*
