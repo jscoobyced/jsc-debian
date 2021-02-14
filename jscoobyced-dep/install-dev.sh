@@ -1,6 +1,7 @@
 #!/bin/sh
 
-./jscrc.sh
+SUDOUSER=$(who | cut -d" " -f1)
+echo "Running for user ${SUDOUSER}"
 
 echo "Installing Docker repository."
 ALREADY=$(add-apt-repository -L | grep -i docker | wc -l)
