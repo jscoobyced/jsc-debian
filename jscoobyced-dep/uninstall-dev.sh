@@ -13,6 +13,7 @@ fi
 
 echo "Removing Visual Studio Code repository."
 rm -f /etc/apt/sources.list.d/microsoft.list
+rm -f /etc/apt/sources.list.d/vscode.list
 rm -f /usr/share/keyrings/microsoft.gpg
 
 echo "Uninstallation complete."

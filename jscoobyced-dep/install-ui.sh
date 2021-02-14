@@ -7,16 +7,18 @@ install_repo() {
   if [ "0" = "${ALREADY}" ]; then
     curl -fsSL $3 | gpg --dearmor | tee /usr/share/keyrings/$2.gpg > /dev/null
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/$2.gpg] $4" | tee /etc/apt/sources.list.d/$2.list
+    echo ""
     echo "##########################################################################"
     echo "# You will need to run:"
     echo "# sudo apt update && sudo apt install $5"
     echo "# in order to install $1"
     echo "##########################################################################"
+    echo ""
   else
     echo "Already setup."
   fi
 }
 
-install_repo "Brave Browser" "brave-browser" "https://brave-browser-apt-release.s3.brave.com/brave-core.asc" "https://brave-browser-apt-release.s3.brave.com/ stable main"
+install_repo "Brave Browser" "brave-browser" "https://brave-browser-apt-release.s3.brave.com/brave-core.asc" "https://brave-browser-apt-release.s3.brave.com/ stable main" "brave-browser"
 
 echo "Installation complete."
