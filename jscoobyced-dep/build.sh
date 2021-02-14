@@ -43,8 +43,6 @@ Maintainer: ${PKGMAINTAINER} <${PKGEMAIL}>
 Description: ${PKGDESC}
 EOF
 
-cp jscrc.sh $DEBIAN/
-
 cp install"${JSCV}".sh $DEBIAN/postinst
 
 cp preinstall"${JSCV}".sh $DEBIAN/preinst
