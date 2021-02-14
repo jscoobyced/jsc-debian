@@ -28,7 +28,10 @@ echo "Creating directory structure"
 
 mkdir $PACKAGE
 mkdir -p $DESTINATION $BINS
-cp ./scripts/* $BINS
+
+if [ "-ui" = "${JSCV}" ]; then
+  cp ./scripts/* $BINS
+fi
 
 echo "Creating DEBIAN structure"
 
