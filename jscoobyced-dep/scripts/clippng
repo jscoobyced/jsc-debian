@@ -1,0 +1,15 @@
+#!/bin/bash
+
+NOWDATE=$(date +%Y-%m-%d-%H%M%S)
+OUTPUT=$1
+
+if [ $# -eq 0 ]; then
+	OUTPUT="/tmp/${NOWDATE}.png"
+fi
+
+xclip -selection clipboard -t image/png -o > "${OUTPUT}"
+RETVAL=$?
+
+if [ ${RETVAL} -eq 0 ]; then
+	echo Saved in ${OUTPUT}
+fi

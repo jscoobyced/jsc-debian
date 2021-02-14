@@ -15,6 +15,7 @@ source .env"${JSCV}"
 VERSION=$MAJOR.$MINOR-$REVISION
 PACKAGE=${PROJECT}_${VERSION}
 DESTINATION=$PACKAGE/usr/share/${PROJECT}
+BINS=$PACKAGE/usr/local/bin
 DEBIAN=$PACKAGE/DEBIAN
 
 echo "Packaging $PROJECT version $VERSION"
@@ -26,7 +27,8 @@ rm -Rf ${PROJECT}_*
 echo "Creating directory structure"
 
 mkdir $PACKAGE
-mkdir -p $DESTINATION
+mkdir -p $DESTINATION $BINS
+cp ./scripts/* $BINS
 
 echo "Creating DEBIAN structure"
 
