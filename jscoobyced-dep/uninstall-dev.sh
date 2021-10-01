@@ -16,5 +16,7 @@ rm -f /etc/apt/sources.list.d/microsoft.list
 rm -f /etc/apt/sources.list.d/vscode.list
 rm -f /usr/share/keyrings/microsoft.gpg
 rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
+rm -f /etc/apt/trusted.gpg.d/nodejs.gpg
+rm -f /etc/apt/trusted.gpg.d/yarn.gpg
 
 echo "Uninstallation complete."

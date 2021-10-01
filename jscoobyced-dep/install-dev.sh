@@ -31,8 +31,9 @@ fi
 
 if [ ! -f /home/${SUDOUSER}/bin/docker-credential-secretservice ]; then
   pushd /tmp
-  wget https://github.com/docker/docker-credential-helpers/releases/download/v0.6.3/docker-credential-secretservice-v0.6.3-amd64.tar.gz
-  tar -zxf docker-credential-secretservice-v0.6.3-amd64.tar.gz
+  DC_VERSION="v0.6.4"
+  wget https://github.com/docker/docker-credential-helpers/releases/download/${DC_VERSION}/docker-credential-secretservice-${DC_VERSION}-amd64.tar.gz
+  tar -zxf docker-credential-secretservice-${DC_VERSION}-amd64.tar.gz
   mkdir -p /home/${SUDOUSER}/bin/
   mkdir -p /home/${SUDOUSER}/.docker
   cp docker-credential-secretservice /home/${SUDOUSER}/bin/
@@ -46,6 +47,16 @@ fi
 ALREADY=$(which code)
   if [ "" = "${ALREADY}" ]; then
   install_repo "Visual Studio Code" "microsoft" "https://packages.microsoft.com/keys/microsoft.asc" "https://packages.microsoft.com/repos/vscode stable main" "vscode"
+fi
+
+ALREADY=$(which node)
+  if [ "" = "${ALREADY}" ]; then
+  install_repo "Node JS" "nodejs" "https://deb.nodesource.com/gpgkey/nodesource.gpg.key" "https://deb.nodesource.com/node_14.x hirsute main" "nodejs"
+fi
+
+ALREADY=$(which yarn)
+  if [ "" = "${ALREADY}" ]; then
+  install_repo "Yarn" "yarn" "https://dl.yarnpkg.com/debian/pubkey.gpg" "https://dl.yarnpkg.com/debian stable main" "yarn"
 fi
 
 echo "Installation complete."

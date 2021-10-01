@@ -25,7 +25,7 @@ update-locale LC_IDENTIFICATION="en_US.UTF-8"
 
 install_repo() {
   echo "Installing $1 repository."
-  ALREADY=$(add-apt-repository -L | grep -i $2 | wc -l)
+  ALREADY=$(apt-cache policy | grep http | awk '{print $2" "$3}' | grep -i $2 | wc -l)
 
   if [ "0" = "${ALREADY}" ]; then
     curl -fsSL $3 | gpg --dearmor | tee /usr/share/keyrings/$2.gpg > /dev/null
