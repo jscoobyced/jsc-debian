@@ -19,4 +19,9 @@ rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
 rm -f /etc/apt/trusted.gpg.d/nodejs.gpg
 rm -f /etc/apt/trusted.gpg.d/yarn.gpg
 
+echo "Restauring ~/.bashrc"
+USERHOMEDIR=$(getent passwd ${SUDOUSER} | cut -f6 -d:)
+cp "${USERHOMEDIR}/.bashrc" "${USERHOMEDIR}/.bashrc.old"
+cp "${USERHOMEDIR}/.bashrc.bak" "${USERHOMEDIR}/.bashrc"
+
 echo "Uninstallation complete."

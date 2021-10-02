@@ -59,4 +59,18 @@ ALREADY=$(which yarn)
   install_repo "Yarn" "yarn" "https://dl.yarnpkg.com/debian/pubkey.gpg" "https://dl.yarnpkg.com/debian stable main" "yarn"
 fi
 
+echo "Installing Git prompt"
+
+USERHOMEDIR=$(getent passwd ${SUDOUSER} | cut -f6 -d:)
+cp "${USERHOMEDIR}/.bashrc" "${USERHOMEDIR}/.bashrc.bak"
+cat <<EOT >> "${USERHOMEDIR}/.bashrc"
+
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+PS1='\${debian_chroot:+(\$debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;33m\]\$(parse_git_branch " \(\%s\)")\[\033[00m\] \$ '
+EOT
+
+source "${USERHOMEDIR}/.bashrc"
+
 echo "Installation complete."
