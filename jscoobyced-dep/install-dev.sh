@@ -5,7 +5,7 @@ echo "Running for user ${SUDOUSER}"
 
 source ./deps.sh
 
-ALREADY=$(which docker)
+ALREADY=$(ls /etc/apt/sources.list.d/docker* | grep -v "cannot access")
 if [ "" = "${ALREADY}" ]; then
   install_repo "Docker" "docker" "https://download.docker.com/linux/ubuntu/gpg" "https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" "docker-ce"
   groupadd docker
@@ -27,17 +27,17 @@ if [ ! -f /home/${SUDOUSER}/bin/docker-credential-secretservice ]; then
   popd
 fi
 
-ALREADY=$(which code)
+ALREADY=$(ls /etc/apt/sources.list.d/microsoft* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
   install_repo "Visual Studio Code" "microsoft" "https://packages.microsoft.com/keys/microsoft.asc" "https://packages.microsoft.com/repos/vscode stable main" "vscode"
 fi
 
-ALREADY=$(which node)
+ALREADY=$(ls /etc/apt/sources.list.d/node* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
   install_repo "Node JS" "nodejs" "https://deb.nodesource.com/gpgkey/nodesource.gpg.key" "https://deb.nodesource.com/node_14.x hirsute main" "nodejs"
 fi
 
-ALREADY=$(which yarn)
+ALREADY=$(ls /etc/apt/sources.list.d/yarn* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
   install_repo "Yarn" "yarn" "https://dl.yarnpkg.com/debian/pubkey.gpg" "https://dl.yarnpkg.com/debian stable main" "yarn"
 fi
