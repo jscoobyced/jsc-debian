@@ -3,7 +3,7 @@
 SUDOUSER=$(who | cut -d" " -f1)
 echo "Running for user ${SUDOUSER}"
 
-source deps.sh
+source ./deps.sh
 
 ALREADY=$(which docker)
 if [ "" = "${ALREADY}" ]; then

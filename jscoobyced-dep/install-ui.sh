@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-source deps.sh
+source ./deps.sh
 
 install_repo "Brave Browser" "brave-browser" "https://brave-browser-apt-release.s3.brave.com/brave-core.asc" "https://brave-browser-apt-release.s3.brave.com/ stable main" "brave-browser"
 
