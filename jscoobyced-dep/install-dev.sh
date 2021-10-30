@@ -74,6 +74,7 @@ source "${USERHOMEDIR}/.bashrc"
 
 echo "Installing kubectl"
 
+rm -f /tmp/kubectl
 curl --silent -o /tmp/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
 curl --silent -o /tmp/kubectl.sha256 https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl.sha256
 openssl sha1 -sha256 /tmp/kubectl | awk '{print $2" kubectl"}' > /tmp/kubectl.sha256.ori
@@ -81,19 +82,21 @@ SHADIFF=$(diff /tmp/kubectl.sha256.ori /tmp/kubectl.sha256 | wc -l)
 if [ "${SHADIFF}" == "0" ];
 then
   chmod +x /tmp/kubectl
-  mv /tmp/kubectl $HOME/bin/kubectl
+  mv /tmp/kubectl ${USERHOMEDIR}/bin/kubectl
 fi
 rm /tmp/kubectl*
 
 echo "Installing AWS eksctl"
 
+rm -f /tmp/eksctl
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 chmod u+x /tmp/eksctl
-mv /tmp/eksctl $HOME/bin/eksctl
+mv /tmp/eksctl ${USERHOMEDIR}/bin/eksctl
 
 echo "Installing AWS CLI version 2"
 
 pushd /tmp
+rm -Rf aws
 curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
 unzip awscliv2.zip
 ./aws/install

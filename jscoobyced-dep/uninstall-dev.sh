@@ -24,4 +24,11 @@ USERHOMEDIR=$(getent passwd ${SUDOUSER} | cut -f6 -d:)
 cp "${USERHOMEDIR}/.bashrc" "${USERHOMEDIR}/.bashrc.old"
 cp "${USERHOMEDIR}/.bashrc.bak" "${USERHOMEDIR}/.bashrc"
 
+echo "Uninstalling cloud tools"
+rm /usr/local/bin/aws
+rm /usr/local/bin/aws_completer
+rm -rf /usr/local/aws-cli
+rm -f ${USERHOMEDIR}/bin/kubectl
+rm -f ${USERHOMEDIR}/bin/eksctl
+
 echo "Uninstallation complete."
