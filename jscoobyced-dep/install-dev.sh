@@ -98,7 +98,7 @@ echo "Installing AWS CLI version 2"
 pushd /tmp
 rm -Rf aws
 curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-unzip awscliv2.zip
+unzip -qq awscliv2.zip
 ./aws/install
 popd
 
