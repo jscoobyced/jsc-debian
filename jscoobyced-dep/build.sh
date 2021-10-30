@@ -54,8 +54,6 @@ cp preinstall"${JSCV}".sh $DEBIAN/preinst
 
 cp uninstall"${JSCV}".sh $DEBIAN/postrm
 
-cp deps.sh $DEBIAN/deps.sh
-
 chown -Rf root:root $PACKAGE
 
 echo "Building Package"

@@ -70,7 +70,33 @@ parse_git_branch() {
 }
 PS1='\${debian_chroot:+(\$debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;33m\]\$(parse_git_branch " \(\%s\)")\[\033[00m\] \$ '
 EOT
-
 source "${USERHOMEDIR}/.bashrc"
+
+echo "Installing kubectl"
+
+curl --silent -o /tmp/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
+curl --silent -o /tmp/kubectl.sha256 https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl.sha256
+openssl sha1 -sha256 /tmp/kubectl | awk '{print $2" kubectl"}' > /tmp/kubectl.sha256.ori
+SHADIFF=$(diff /tmp/kubectl.sha256.ori /tmp/kubectl.sha256 | wc -l)
+if [ "${SHADIFF}" == "0" ];
+then
+  chmod +x /tmp/kubectl
+  mv /tmp/kubectl $HOME/bin/kubectl
+fi
+rm /tmp/kubectl*
+
+echo "Installing AWS eksctl"
+
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+chmod u+x /tmp/eksctl
+mv /tmp/eksctl $HOME/bin/eksctl
+
+echo "Installing AWS CLI version 2"
+
+pushd /tmp
+curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+unzip awscliv2.zip
+./aws/install
+popd
 
 echo "Installation complete."
