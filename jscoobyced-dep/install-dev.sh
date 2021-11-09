@@ -46,7 +46,7 @@ fi
 
 ALREADY=$(ls /etc/apt/sources.list.d/microsoft* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
-  install_repo "Visual Studio Code" "microsoft" "https://packages.microsoft.com/keys/microsoft.asc" "https://packages.microsoft.com/repos/vscode stable main" "vscode"
+  install_repo "Visual Studio Code" "microsoft" "https://packages.microsoft.com/keys/microsoft.asc" "https://packages.microsoft.com/repos/vscode stable main" "code"
 fi
 
 ALREADY=$(ls /etc/apt/sources.list.d/node* | grep -v "cannot access")
