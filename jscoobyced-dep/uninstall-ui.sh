@@ -10,7 +10,4 @@ rm -f /etc/apt/sources.list.d/spotify.list
 rm -f /usr/share/keyrings/spotify.gpg
 rm -f /etc/apt/trusted.gpg.d/spotify-*.gpg
 
-echo "Removing custom scripts"
-rm -f /usr/local/bin/clippng
-
 echo "Uninstallation complete."

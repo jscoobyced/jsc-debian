@@ -31,6 +31,7 @@ mkdir -p $DESTINATION $BINS
 
 if [ "-ui" = "${JSCV}" ]; then
   cp ./scripts/* $BINS
+  chmod +x $BINS/*
 fi
 
 echo "Creating DEBIAN structure"
