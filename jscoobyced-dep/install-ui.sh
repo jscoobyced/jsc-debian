@@ -26,7 +26,7 @@ fi
 
 ALREADY=$(ls /etc/apt/sources.list.d/spotify* | grep -v "cannot access")
 if [ "" = "${ALREADY}" ]; then
-    install_repo "Spotify" "spotify" "https://download.spotify.com/debian/pubkey_0D811D58.gpg" "http://repository.spotify.com stable non-free" "spotify-client"
+    install_repo "Spotify" "spotify" "https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg" "http://repository.spotify.com stable non-free" "spotify-client"
 
 fi
 
