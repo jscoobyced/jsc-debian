@@ -102,4 +102,11 @@ unzip -qq awscliv2.zip
 ./aws/install
 popd
 
+ALREADY=$(ls /etc/apt/sources.list.d/terraform* | grep -v "cannot access")
+  if [ "" = "${ALREADY}" ]; then
+  install_repo "Terraform client" "terraform" "https://apt.releases.hashicorp.com/gpg" "https://apt.releases.hashicorp.com $(lsb_release -cs) main" "terraform"
+fi
+
+
+
 echo "Installation complete."
