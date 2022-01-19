@@ -3,6 +3,9 @@
 SUDOUSER=$(who | cut -d" " -f1)
 echo "Running for user ${SUDOUSER}"
 
+KUBECTL_VERSION="1.21.2/2021-07-05"
+DOCKER_COMPOSE_VERSION=1.29.2
+
 install_repo() {
   echo "Installing $1 repository."
   ALREADY=$(add-apt-repository -L | grep -i $2 | wc -l)
@@ -75,8 +78,8 @@ source "${USERHOMEDIR}/.bashrc"
 echo "Installing kubectl"
 
 rm -f /tmp/kubectl
-curl --silent -o /tmp/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl
-curl --silent -o /tmp/kubectl.sha256 https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl.sha256
+curl --silent -o /tmp/kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+curl --silent -o /tmp/kubectl.sha256 https://amazon-eks.s3.us-west-2.amazonaws.com/${KUBECTL_VERSION}/bin/linux/amd64/kubectl.sha256
 openssl sha1 -sha256 /tmp/kubectl | awk '{print $2" kubectl"}' > /tmp/kubectl.sha256.ori
 SHADIFF=$(diff /tmp/kubectl.sha256.ori /tmp/kubectl.sha256 | wc -l)
 if [ "${SHADIFF}" == "0" ];
@@ -107,6 +110,8 @@ ALREADY=$(ls /etc/apt/sources.list.d/terraform* | grep -v "cannot access")
   install_repo "Terraform client" "terraform" "https://apt.releases.hashicorp.com/gpg" "https://apt.releases.hashicorp.com $(lsb_release -cs) main" "terraform"
 fi
 
+echo "Installing docker-compose"
 
+curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 echo "Installation complete."
