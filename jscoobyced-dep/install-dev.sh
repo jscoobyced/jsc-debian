@@ -1,10 +1,10 @@
 #!/bin/bash
 
-SUDOUSER=$(who | cut -d" " -f1)
+SUDOUSER=$(who | grep -v pts | tail -n 1 | cut -d" " -f1)
 echo "Running for user ${SUDOUSER}"
 
-KUBECTL_VERSION="1.21.2/2021-07-05"
-DOCKER_COMPOSE_VERSION=1.29.2
+KUBECTL_VERSION="1.24.7/2022-10-31"
+DOCKER_COMPOSE_VERSION="v2.14.0"
 
 install_repo() {
   echo "Installing $1 repository."
@@ -34,9 +34,8 @@ fi
 
 if [ ! -f /home/${SUDOUSER}/bin/docker-credential-secretservice ]; then
   pushd /tmp
-  DC_VERSION="v0.6.4"
-  wget https://github.com/docker/docker-credential-helpers/releases/download/${DC_VERSION}/docker-credential-secretservice-${DC_VERSION}-amd64.tar.gz
-  tar -zxf docker-credential-secretservice-${DC_VERSION}-amd64.tar.gz
+  DC_VERSION="v0.7.0"
+  wget https://github.com/docker/docker-credential-helpers/releases/download/${DC_VERSION}/docker-credential-secretservice-${DC_VERSION}.linux-amd64
   mkdir -p /home/${SUDOUSER}/bin/
   mkdir -p /home/${SUDOUSER}/.docker
   cp docker-credential-secretservice /home/${SUDOUSER}/bin/
@@ -47,9 +46,16 @@ if [ ! -f /home/${SUDOUSER}/bin/docker-credential-secretservice ]; then
   popd
 fi
 
+echo "Installing docker-compose"
+
+curl -L --silent "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
 ALREADY=$(ls /etc/apt/sources.list.d/microsoft* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
   install_repo "Visual Studio Code" "microsoft" "https://packages.microsoft.com/keys/microsoft.asc" "https://packages.microsoft.com/repos/vscode stable main" "code"
+  mv /usr/share/keyrings/packages.microsoft.gpg /tmp/
+  install -D -o root -g root -m 644 /tmp/packages.microsoft.gpg /usr/share/keyrings/packages.microsoft.gpg
 fi
 
 ALREADY=$(ls /etc/apt/sources.list.d/node* | grep -v "cannot access")
@@ -109,9 +115,5 @@ ALREADY=$(ls /etc/apt/sources.list.d/terraform* | grep -v "cannot access")
   if [ "" = "${ALREADY}" ]; then
   install_repo "Terraform client" "terraform" "https://apt.releases.hashicorp.com/gpg" "https://apt.releases.hashicorp.com $(lsb_release -cs) main" "terraform"
 fi
-
-echo "Installing docker-compose"
-
-curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 echo "Installation complete."

@@ -1,34 +1,62 @@
 #!/bin/bash
 
-SUDOUSER=$(who | cut -d" " -f1)
-echo "Running for user ${SUDOUSER}"
+SUDOUSER=$(who | grep -v pts | tail -n 1 | cut -d" " -f1)
+USERHOMEDIR=$(getent passwd ${SUDOUSER} | cut -f6 -d:)
+JSC_CONTINUE="N"
 
-echo "Removing Docker repository and configuration."
-rm -f /etc/apt/sources.list.d/docker.list
-rm -f /usr/share/keyrings/docker.gpg
-if [ "" != "${SUDOUSER}" ] && [ "root" != "${SUDOUSER}" ]; then
-  rm -Rf /home/${SUDOUSER}/.docker
-  rm -f /home/${SUDOUSER}/bin/docker-credential-secretservice
+echo "Running for user ${SUDOUSER} with home directory ${USERHOMEDIR}."
+echo "Some files will be deleted in the home directory."
+read -p "Do you want to continue? [y/N] " JSC_CONTINUE_PROMPT
+
+if [ "y" == "${JSC_CONTINUE_PROMPT}" ] || [ "Y" == "${JSC_CONTINUE_PROMPT}" ]; then
+  JSC_CONTINUE="Y"
 fi
 
-echo "Removing Visual Studio Code repository."
-rm -f /etc/apt/sources.list.d/microsoft.list
-rm -f /etc/apt/sources.list.d/vscode.list
-rm -f /usr/share/keyrings/microsoft.gpg
-rm -f /etc/apt/trusted.gpg.d/microsoft.gpg
-rm -f /etc/apt/trusted.gpg.d/nodejs.gpg
-rm -f /etc/apt/trusted.gpg.d/yarn.gpg
+check_and_delete() {
+  if [ -f $1 ]; then
+    if [ "Y" == "$2" ]; then
+      echo rm -Rf $1 >> /tmp/jscoobyced.txt
+    else
+      echo rm -f $1 >> /tmp/jscoobyced.txt
+    fi
+  fi
+}
 
-echo "Restauring ~/.bashrc"
-USERHOMEDIR=$(getent passwd ${SUDOUSER} | cut -f6 -d:)
-cp "${USERHOMEDIR}/.bashrc" "${USERHOMEDIR}/.bashrc.old"
-cp "${USERHOMEDIR}/.bashrc.bak" "${USERHOMEDIR}/.bashrc"
+do_uninstall() {
+  echo "Removing Docker repository and configuration."
+  check_and_delete /etc/apt/sources.list.d/docker.list
+  check_and_delete /usr/share/keyrings/docker.gpg
+  if [ "" != "${SUDOUSER}" ] && [ "root" != "${SUDOUSER}" ]; then
+    check_and_delete ${USERHOMEDIR}/.docker Y
+    check_and_delete ${USERHOMEDIR}/bin/docker-credential-secretservice
+  fi
 
-echo "Uninstalling cloud tools"
-rm /usr/local/bin/aws
-rm /usr/local/bin/aws_completer
-rm -rf /usr/local/aws-cli
-rm -f ${USERHOMEDIR}/bin/kubectl
-rm -f ${USERHOMEDIR}/bin/eksctl
+  echo "Removing Visual Studio Code repository."
+  check_and_delete /etc/apt/sources.list.d/microsoft.list
+  check_and_delete /etc/apt/sources.list.d/vscode.list
+  check_and_delete /usr/share/keyrings/microsoft.gpg
+  check_and_delete /etc/apt/trusted.gpg.d/microsoft.gpg
+  check_and_delete /etc/apt/trusted.gpg.d/nodejs.gpg
+  check_and_delete /etc/apt/trusted.gpg.d/yarn.gpg
+
+  echo "Restauring ~/.bashrc"
+  if [ -f "${USERHOMEDIR}/.bashrc.bak" ]; then
+    cp "${USERHOMEDIR}/.bashrc" "${USERHOMEDIR}/.bashrc.old"
+    cp "${USERHOMEDIR}/.bashrc.bak" "${USERHOMEDIR}/.bashrc"
+  fi
+
+  echo "Uninstalling cloud tools"
+  check_and_delete /usr/local/bin/aws
+  check_and_delete /usr/local/bin/aws_completer
+  check_and_delete /usr/local/aws-cli
+  check_and_delete ${USERHOMEDIR}/bin/kubectl
+  check_and_delete ${USERHOMEDIR}/bin/eksctl
+}
+
+if [ "Y" == "${JSC_CONTINUE}" ]; then
+  do_uninstall
+  echo "Action that would have been executed:"
+  cat /tmp/jscoobyced.txt
+fi
 
 echo "Uninstallation complete."

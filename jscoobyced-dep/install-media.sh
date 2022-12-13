@@ -19,6 +19,6 @@ install_repo() {
   fi
 }
 
-pip3 install --upgrade youtube-dl
+pip3 install --upgrade yt-dlp
 
 echo "Installation complete."

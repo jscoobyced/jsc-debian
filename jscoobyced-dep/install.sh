@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SUDOUSER=$(who | cut -d" " -f1)
+SUDOUSER=$(who | grep -v pts | tail -n 1 | cut -d" " -f1)
 echo "Running for user ${SUDOUSER}"
 
 echo "Updating locale to 'en_US'"
