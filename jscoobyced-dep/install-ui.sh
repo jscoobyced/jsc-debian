@@ -30,4 +30,13 @@ if [ "" = "${ALREADY}" ]; then
 
 fi
 
+
+echo "If you want to install all the new dev tools, run:"
+echo ""
+echo "##########################################################################"
+echo ""
+echo "sudo apt install brave-browser spotify"
+echo ""
+echo "##########################################################################"
+
 echo "Installation complete."
