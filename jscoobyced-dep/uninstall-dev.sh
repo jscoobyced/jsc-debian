@@ -15,9 +15,13 @@ fi
 check_and_delete() {
   if [ -f $1 ]; then
     if [ "Y" == "$2" ]; then
-      echo rm -Rf $1 >> /tmp/jscoobyced.txt
+      if [ -d "$1" ]; then
+        echo rm -Rf $1 >> /tmp/jscoobyced.txt
+      fi
     else
-      echo rm -f $1 >> /tmp/jscoobyced.txt
+      if [ -f "$1" ]; then
+        echo rm -f $1 >> /tmp/jscoobyced.txt
+      fi
     fi
   fi
 }
