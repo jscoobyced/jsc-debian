@@ -35,7 +35,7 @@ fi
 if [ ! -f /home/${SUDOUSER}/bin/docker-credential-secretservice ]; then
   pushd /tmp
   DC_VERSION="v0.7.0"
-  wget https://github.com/docker/docker-credential-helpers/releases/download/${DC_VERSION}/docker-credential-secretservice-${DC_VERSION}.linux-amd64
+  wget -q -O docker-credential-secretservice "https://github.com/docker/docker-credential-helpers/releases/download/${DC_VERSION}/docker-credential-secretservice-${DC_VERSION}.linux-amd64"
   mkdir -p /home/${SUDOUSER}/bin/
   mkdir -p /home/${SUDOUSER}/.docker
   cp docker-credential-secretservice /home/${SUDOUSER}/bin/
